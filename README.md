@@ -1,10 +1,10 @@
-#Go Tracer WiFi
+# Go Tracer WiFi
 
 A Go package to communicate with an EPSolar Tracer A/AN charge controller equipped with the eBox-Wifi-01
 
 Only tested with EPSolar Tracer3210AN equipped with the eBox-Wifi-01
 
-##Example
+## Example
 
 ```go
 package main

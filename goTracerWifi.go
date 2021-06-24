@@ -105,6 +105,7 @@ func Status(ip string, port string, timeout time.Duration) (r Response, err erro
 	return
 }
 
+// Credit: https://github.com/spagettikod/gotracer
 func unpack(slice []byte) float32 {
 	var v uint32
 	for i, b := range slice {

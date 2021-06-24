@@ -118,7 +118,7 @@ func unpack(slice []byte) float32 {
 func requestInputRegister(client modbus.Client, address uint16, quantity uint16) (results []byte) {
 	results, err := client.ReadInputRegisters(address, quantity)
 	if err != nil {
-		pterm.Error.Println(err)
+		pterm.Error.Println(time.Now().UTC(), err)
 	}
 	return
 }

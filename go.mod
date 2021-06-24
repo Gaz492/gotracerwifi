@@ -1,4 +1,4 @@
-module goTracerWiFi
+module github.com/Gaz492/gotracerwifi
 
 go 1.16
 

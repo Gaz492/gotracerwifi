@@ -1,4 +1,4 @@
-package goTracerWiFi
+package gotracerwifi
 
 import (
 	"fmt"

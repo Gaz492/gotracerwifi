@@ -2,13 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/Gaz492/gotracerwifi"
 	"github.com/pterm/pterm"
-	"goTracerWiFi"
 	"time"
 )
 
 func main()  {
-	tracer, err := goTracerWiFi.Status("192.168.1.181", "8088", 5 * time.Second)
+	tracer, err := gotracerwifi.Status("192.168.1.181", "8088", 5 * time.Second)
 	if err != nil {
 		pterm.Fatal.Println(err)
 	}

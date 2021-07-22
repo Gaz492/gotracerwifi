@@ -1,6 +1,7 @@
 package gotracerwifi
 
 import (
+	"errors"
 	"fmt"
 	"github.com/grid-x/modbus"
 	"github.com/pterm/pterm"
@@ -54,19 +55,36 @@ type Stats struct {
 	Energy Energy `json:"energy"`
 }
 
-func Status(ip string, port string, timeout time.Duration) (r Response, err error) {
-	// Modbus TCP
-	handler := modbus.NewRTUOverTCPClientHandler(fmt.Sprintf("%s:%s", ip, port))
-	handler.SlaveID = 1
-	handler.Timeout = timeout
-	//handler.Logger = log.New(os.Stdout, "INFO: ", log.LstdFlags)
+func Status(ip string, port string, timeout time.Duration, protocol string) (r Response, err error) {
+	var client modbus.Client
+	if protocol == "TCP"{
+		handler := modbus.NewTCPClientHandler(fmt.Sprintf("%s:%s", ip, port))
+		handler.SlaveID = 1
+		handler.Timeout = timeout
+		//handler.Logger = log.New(os.Stdout, "INFO: ", log.LstdFlags)
 
-	err = handler.Connect()
-	if err != nil {
+		err = handler.Connect()
+		if err != nil {
+			return
+		}
+		defer handler.Close()
+		client = modbus.NewClient(handler)
+	}else if protocol == "RTU_TCP" {
+		handler := modbus.NewRTUOverTCPClientHandler(fmt.Sprintf("%s:%s", ip, port))
+		handler.SlaveID = 1
+		handler.Timeout = timeout
+		//handler.Logger = log.New(os.Stdout, "INFO: ", log.LstdFlags)
+
+		err = handler.Connect()
+		if err != nil {
+			return
+		}
+		defer handler.Close()
+		client = modbus.NewClient(handler)
+	}else{
+		err = errors.New("invalid protocol")
 		return
 	}
-	defer handler.Close()
-	client := modbus.NewClient(handler)
 
 	r.Timestamp = time.Now().UTC()
 

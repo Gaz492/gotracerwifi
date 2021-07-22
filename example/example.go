@@ -8,7 +8,7 @@ import (
 )
 
 func main()  {
-	tracer, err := gotracerwifi.Status("192.168.1.181", "8088", 5 * time.Second)
+	tracer, err := gotracerwifi.Status("192.168.1.127", "8899", 5 * time.Second, "TCP")
 	if err != nil {
 		pterm.Fatal.Println(err)
 	}

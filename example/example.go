@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-func main()  {
-	tracer, err := gotracerwifi.Status("192.168.1.127", "8899", 5 * time.Second, "TCP")
+func main() {
+	tracer, err := gotracerwifi.Status("192.168.1.127", "8899", 5*time.Second, "TCP")
 	if err != nil {
 		pterm.Fatal.Println(err)
 	}
@@ -19,4 +19,9 @@ func main()  {
 		return
 	}
 	pterm.Info.Println(string(response))
+
+	err = gotracerwifi.ToggleLoad("192.168.1.127", "8899", 5*time.Second, "TCP")
+	if err != nil {
+		pterm.Fatal.Println(err)
+	}
 }

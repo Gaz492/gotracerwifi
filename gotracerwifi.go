@@ -109,7 +109,7 @@ func Status(ip string, port string, timeout time.Duration, protocol string) (r R
 	r.Load.Voltage = unpack(requestInputRegister(client, 0x310C, 1)) / 100
 	r.Load.Current = unpack(requestInputRegister(client, 0x310D, 1)) / 100
 	r.Load.Power = unpack(requestInputRegister(client, 0x310E, 1)) / 100
-	r.Load.Status = GetLoadStatus(client)
+	r.Load.Status = OldGetLoadStatus(client)
 
 	r.Stats.Energy.Generated.Day = unpack(requestInputRegister(client, 0x330C, 1)) / 100
 	r.Stats.Energy.Generated.Month = unpack(requestInputRegister(client, 0x330E, 1)) / 100
@@ -124,7 +124,7 @@ func Status(ip string, port string, timeout time.Duration, protocol string) (r R
 	return
 }
 
-func ToggleLoad(ip string, port string, timeout time.Duration, protocol string) (err error) {
+func OldToggleLoad(ip string, port string, timeout time.Duration, protocol string) (err error) {
 	var client modbus.Client
 	if protocol == "TCP" {
 		handler := modbus.NewTCPClientHandler(fmt.Sprintf("%s:%s", ip, port))
@@ -155,7 +155,7 @@ func ToggleLoad(ip string, port string, timeout time.Duration, protocol string) 
 		return
 	}
 
-	loadStatus := GetLoadStatus(client)
+	loadStatus := OldGetLoadStatus(client)
 
 	var res []byte
 	if loadStatus == 0 {
@@ -167,25 +167,7 @@ func ToggleLoad(ip string, port string, timeout time.Duration, protocol string) 
 	return
 }
 
-// Credit: https://github.com/spagettikod/gotracer
-func unpack(slice []byte) float32 {
-	var v uint32
-	for i, b := range slice {
-		shift := uint((len(slice) - 1 - i) * 8)
-		v += uint32(b) << shift
-	}
-	return float32(v)
-}
-
-func requestInputRegister(client modbus.Client, address uint16, quantity uint16) (results []byte) {
-	results, err := client.ReadInputRegisters(address, quantity)
-	if err != nil {
-		pterm.Error.Println(time.Now().UTC().Format(time.RFC1123Z), err)
-	}
-	return
-}
-
-func GetLoadStatus(client modbus.Client) (status int) {
+func OldGetLoadStatus(client modbus.Client) (status int) {
 	loadStatus, err := client.ReadCoils(0x2, 1)
 	if err != nil {
 		pterm.Error.Println(time.Now().UTC().Format(time.RFC1123Z), err)

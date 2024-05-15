@@ -61,7 +61,7 @@ func (c Client) SetLoadOn() error {
 }
 
 // Solar stuff
-func (c Client) GetSolarVoltage() (float32, error) {
+func (c Client) GetPvVoltage() (float32, error) {
 	r, err := c.readInputRegister(0x3100, 1)
 	if err != nil {
 		return 0, err
@@ -69,7 +69,7 @@ func (c Client) GetSolarVoltage() (float32, error) {
 	return unpack(r) / 100, nil
 }
 
-func (c Client) GetSolarCurrent() (float32, error) {
+func (c Client) GetPvCurrent() (float32, error) {
 	r, err := c.readInputRegister(0x3101, 1)
 	if err != nil {
 		return 0, err
@@ -77,7 +77,7 @@ func (c Client) GetSolarCurrent() (float32, error) {
 	return unpack(r) / 100, nil
 }
 
-func (c Client) GetSolarPower() (float32, error) {
+func (c Client) GetPvPower() (float32, error) {
 	r, err := c.readInputRegister(0x3102, 1)
 	if err != nil {
 		return 0, err
